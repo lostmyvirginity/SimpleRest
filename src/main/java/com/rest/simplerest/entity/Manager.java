@@ -1,7 +1,7 @@
 package com.rest.simplerest.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -13,13 +13,13 @@ public class Manager {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotEmpty
+    @NotBlank(message = "Manager Name cannot be blank")
     private String name;
-    @NotEmpty
+    @NotBlank(message = "Surname cannot be blank")
     private String surname;
-    @NotEmpty
+    @NotBlank(message = "Phone Number cannot be blank")
     private String phoneNumber;
-    @NotEmpty
+    @NotBlank(message = "Email cannot be blank")
     private String email;
 
     @OneToOne(mappedBy = "manager")

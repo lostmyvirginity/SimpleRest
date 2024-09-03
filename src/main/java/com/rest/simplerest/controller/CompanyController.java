@@ -1,6 +1,5 @@
 package com.rest.simplerest.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.rest.simplerest.dto.request.CompanyCreateDTO;
 import com.rest.simplerest.service.CompanyService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,7 +17,7 @@ public class CompanyController {
         this.companyService = companyService;
     }
     @Operation(summary = "Get All Companies")
-    @GetMapping("/getComapnies")
+    @GetMapping("/getCompanies")
     public ResponseEntity<String> getCompanies() {
         return companyService.getWhole();
     }

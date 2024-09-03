@@ -1,7 +1,7 @@
 package com.rest.simplerest.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -17,7 +17,7 @@ public class Company {
     private Long id;
 
     @Column(name = "name")
-    @NotEmpty
+    @NotBlank(message = "Company name cannot be blank")
     private String name;
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
