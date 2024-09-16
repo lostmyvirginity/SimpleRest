@@ -1,9 +1,12 @@
 package com.rest.simplerest.service;
 
 import com.google.gson.Gson;
+import com.rest.simplerest.adapter.CompanyAdapter;
 import com.rest.simplerest.dto.request.CompanyCreateDTO;
+import com.rest.simplerest.dto.request.EmptyCompanyCreateDTO;
 import com.rest.simplerest.dto.response.CompanyDTO;
 import com.rest.simplerest.entity.Company;
+import com.rest.simplerest.projection.CompanyProjection;
 import com.rest.simplerest.repository.CompanyRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +22,11 @@ import java.util.stream.Collectors;
 @Slf4j
 public class CompanyService {
     private final CompanyRepository companyRepository;
-
+    private CompanyAdapter companyAdapter;
     @Autowired
-    public CompanyService(CompanyRepository companyRepository) {
+    public CompanyService(CompanyRepository companyRepository, CompanyAdapter companyAdapter) {
         this.companyRepository = companyRepository;
+        this.companyAdapter = companyAdapter;
     }
 
     public ResponseEntity<String> getWhole() {
@@ -44,8 +48,18 @@ public class CompanyService {
         return ResponseEntity.badRequest().body("Company not found");
     }
 
+    public ResponseEntity<CompanyProjection> getCompaniesWholeData(Long id){
+        Optional<CompanyProjection> company = companyRepository.findByIdWithDepartmentsAndTeamsAndProjectAndManager(id);
+        return company.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    public ResponseEntity<List<CompanyProjection>> getCompaniesWholeData(){
+        Optional<List<CompanyProjection>> company = companyRepository.findByIdWithDepartmentsAndTeamsAndProjectAndManagerWhole();
+        return company.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
     @Transactional(rollbackFor = Exception.class)
-    public ResponseEntity<String> createCompany(CompanyCreateDTO companyCreateDTO) {
+    public ResponseEntity<String> createEmptyCompany(EmptyCompanyCreateDTO companyCreateDTO) {
         try {
             if (companyCreateDTO == null) {
                 return ResponseEntity.badRequest().body("Given company is null");
@@ -54,6 +68,22 @@ public class CompanyService {
             company.setName(companyCreateDTO.getName());
             companyRepository.save(company);
             log.debug("Company was saved: {}", company);
+            return ResponseEntity.ok("Created Successfully");
+        } catch (Exception e) {
+            log.error("Error creating company {}", e.getMessage());
+            return ResponseEntity.internalServerError().body("An unexpected error occurred");
+        }
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public ResponseEntity<String> createCompany(CompanyCreateDTO companyCreateDTO) {
+        try {
+            if (companyCreateDTO == null) {
+                return ResponseEntity.badRequest().body("Given data are null");
+            }
+            Company c = companyAdapter.adaptCompany(companyCreateDTO);
+            companyRepository.save(c);
+            log.debug("Company was saved: {}", c);
             return ResponseEntity.ok("Created Successfully");
         } catch (Exception e) {
             log.error("Error creating company {}", e.getMessage());

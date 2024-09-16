@@ -2,13 +2,14 @@ package com.rest.simplerest.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 @Entity
 @Table(name = "manager")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Manager {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

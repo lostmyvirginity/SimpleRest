@@ -1,6 +1,6 @@
 package com.rest.simplerest.service;
 
-import com.rest.simplerest.dto.request.CompanyCreateDTO;
+import com.rest.simplerest.dto.request.EmptyCompanyCreateDTO;
 import com.rest.simplerest.repository.CompanyRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -90,22 +90,22 @@ public class CompanyServiceTest {
 
     @Test
     public void testCreateNullCompany() {
-        ResponseEntity<String> response = companyService.createCompany(null);
+        ResponseEntity<String> response = companyService.createEmptyCompany(null);
         Assertions.assertEquals(400, response.getStatusCode().value());
         Assertions.assertEquals("Given company is null", response.getBody());
     }
 
     @Test
     public void testCreateValidCompany() {
-        ResponseEntity<String> response = companyService.createCompany(new CompanyCreateDTO("Test"));
+        ResponseEntity<String> response = companyService.createEmptyCompany(new EmptyCompanyCreateDTO("Test"));
         Assertions.assertEquals(200, response.getStatusCode().value());
         Assertions.assertEquals("Created Successfully", response.getBody());
     }
 
     @Test
     public void testCreateEmptyCompany() {
-        Assertions.assertThrows(UnexpectedRollbackException.class, () -> companyService.createCompany(new CompanyCreateDTO("")));
-        Assertions.assertThrows(UnexpectedRollbackException.class, () -> companyService.createCompany(new CompanyCreateDTO(null)));
+        Assertions.assertThrows(UnexpectedRollbackException.class, () -> companyService.createEmptyCompany(new EmptyCompanyCreateDTO("")));
+        Assertions.assertThrows(UnexpectedRollbackException.class, () -> companyService.createEmptyCompany(new EmptyCompanyCreateDTO(null)));
     }
 
     @Test

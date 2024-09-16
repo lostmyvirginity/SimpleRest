@@ -1,13 +1,14 @@
 package com.rest.simplerest.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 @Entity
 @Table(name = "project")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

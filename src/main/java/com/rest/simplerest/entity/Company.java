@@ -2,15 +2,16 @@ package com.rest.simplerest.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.Set;
 
 @Entity
 @Table(name = "company")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
